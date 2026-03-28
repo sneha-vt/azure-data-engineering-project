@@ -14,10 +14,10 @@ This project demonstrates an end-to-end data pipeline built using Azure Data Fac
 RetailDW_Pipeline – Copies data from Azure SQL Database to Azure Data Lake Storage.
 
 ## Pipeline Design
-![Pipeline Design](pipelinedesign.png)
+![Pipeline Design](Pipelinedesign.png)
 
 ## Pipeline Execution
-![Pipeline Execution](pipelinesuccess.png)
+![Pipeline Execution](Pipelinesuccess.png)
 
 ## Author
 Sneha Thomas
