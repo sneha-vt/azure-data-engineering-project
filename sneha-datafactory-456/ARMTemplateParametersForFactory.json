@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "sneha-datafactory-456"
+		},
+		"AzureSqlDatabase1_password": {
+			"value": ""
+		},
+		"LS_ADLS_PARQUET_accountKey": {
+			"value": ""
+		},
+		"LS_BLOB_EXCEL_connectionString": {
+			"value": ""
+		},
+		"AzureSqlDatabase1_properties_typeProperties_server": {
+			"value": "snehadataeng456.database.windows.net"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_database": {
+			"value": "RetailDW_Dev"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_userName": {
+			"value": "sqladmin"
+		},
+		"LS_ADLS_PARQUET_properties_typeProperties_url": {
+			"value": "https://adlsdevfinance002ukoo.dfs.core.windows.net"
+		}
+	}
+}
