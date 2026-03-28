@@ -1,0 +1,9 @@
+{
+	"name": "adffinanceuk",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "2c24e8b6-d06e-4c56-8102-fa1fa8cc8fb4",
+		"tenantId": "3d375008-1e6a-4623-bae8-fcb6616832c6"
+	}
+}
