@@ -1,15 +1,17 @@
-# azure-data-engineering-project
- Azure Data Factory incremental ETL pipeline project
+# Azure Data Engineering Project
 
-This project demonstrates an end-to-end data pipeline built using Azure Data Factory.
+Azure Data Factory Incremental ETL Pipeline Project
 
-Technologies Used:
+This project demonstrates an end-to-end data pipeline built using Azure Data Factory to move data from Azure SQL Database to Azure Data Lake Storage.
+
+## Technologies Used
 - Azure Data Factory
 - Azure SQL Database
 - Azure Data Lake Storage
 - GitHub Integration
 
-Pipeline:
-RetailDW_Pipeline – Copies data from Azure SQL to Data Lake.
+## Pipeline
+RetailDW_Pipeline – Copies data from Azure SQL Database to Azure Data Lake Storage.
 
-Author: Sneha Thomas
+## Author
+Sneha Thomas
