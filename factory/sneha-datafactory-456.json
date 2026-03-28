@@ -1,0 +1,9 @@
+{
+	"name": "sneha-datafactory-456",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "018f3554-ffb4-4eb9-abf3-a8b7661923db",
+		"tenantId": "3d375008-1e6a-4623-bae8-fcb6616832c6"
+	}
+}
