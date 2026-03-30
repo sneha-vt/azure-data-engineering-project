@@ -62,10 +62,7 @@
 							"typeProperties": {
 								"source": {
 									"type": "AzureSqlSource",
-									"sqlReaderQuery": {
-										"value": "SELECT * FROM @{item().TableSchema}.@{item().TableName}\nWHERE @{item().WatermarkColumn} > @{item().LastLoadValue}",
-										"type": "Expression"
-									},
+									"sqlReaderQuery": "SELECT * FROM @{item().TableSchema}.@{item().TableName}",
 									"queryTimeout": "02:00:00",
 									"partitionOption": "None"
 								},
@@ -99,7 +96,7 @@
 									"referenceName": "DS_ADLS_PARQUET",
 									"type": "DatasetReference",
 									"parameters": {
-										"foldername": "foldername = @item().TableName"
+										"foldername": "@item().TableName"
 									}
 								}
 							]
