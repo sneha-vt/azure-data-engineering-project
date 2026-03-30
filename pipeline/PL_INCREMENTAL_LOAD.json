@@ -60,7 +60,7 @@
 							"typeProperties": {
 								"source": {
 									"type": "AzureSqlSource",
-									"sqlReaderQuery": "@concat(\n'SELECT * FROM ',\npipeline().parameters.TableSchema,'.',pipeline().parameters.TableName,\n' WHERE ',\npipeline().parameters.WatermarkColumn,' > ',\npipeline().parameters.LastLoadValue\n)",
+									"sqlReaderQuery": "@concat(\n'SELECT * FROM ',\npipeline().parameters.TableSchema,'.',\npipeline().parameters.TableName,\n' WHERE ',\npipeline().parameters.WatermarkColumn,' > ',\npipeline().parameters.LastLoadValue\n)",
 									"queryTimeout": "02:00:00",
 									"partitionOption": "None"
 								},
@@ -92,9 +92,57 @@
 							"outputs": [
 								{
 									"referenceName": "DS_ADLS_PARQUET",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"foldername": "@pipeline().parameters.TableName"
+									}
 								}
 							]
+						},
+						{
+							"name": "UpdateWatermark_SP",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [
+								{
+									"activity": "Copy_SQL_to_ADLS",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[dbo].[UpdateWatermark]",
+								"storedProcedureParameters": {
+									"TableName": {
+										"value": "@pipeline().parameters.TableName",
+										"type": "String"
+									},
+									"TableSchema": {
+										"value": "@pipeline().parameters.TableSchema",
+										"type": "String"
+									},
+									"WatermarkColumn": {
+										"value": "@pipeline().parameters.WatermarkColumn",
+										"type": "String"
+									},
+									"LastLoadValue": {
+										"value": "@activity('Lookup_MaxWatermark').output.firstRow.MaxValue",
+										"type": "Int32"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "AzureSqlDatabase1",
+								"type": "LinkedServiceReference"
+							}
 						}
 					]
 				}
