@@ -11,13 +11,17 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'AzureSqlDatabase1'"
 		},
-		"LS_ADLS_PARQUET_accountKey": {
+		"LS_ADLS_PARQUET_NEW_accountKey": {
 			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'LS_ADLS_PARQUET'"
+			"metadata": "Secure string for 'accountKey' of 'LS_ADLS_PARQUET_NEW'"
 		},
 		"LS_BLOB_EXCEL_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_BLOB_EXCEL'"
+		},
+		"LS_SQLSERVER_RETAILDW_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_SQLSERVER_RETAILDW'"
 		},
 		"AzureSqlDatabase1_properties_typeProperties_server": {
 			"type": "string",
@@ -31,9 +35,21 @@
 			"type": "string",
 			"defaultValue": "sqladmin"
 		},
-		"LS_ADLS_PARQUET_properties_typeProperties_url": {
+		"LS_ADLS_PARQUET_NEW_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "https://adlsdevfinance002ukoo.dfs.core.windows.net"
+			"defaultValue": "https://snehadatalake456.dfs.core.windows.net/"
+		},
+		"LS_SQLSERVER_RETAILDW_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "JOYAL"
+		},
+		"LS_SQLSERVER_RETAILDW_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "RETAILDW"
+		},
+		"LS_SQLSERVER_RETAILDW_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "adfuser"
 		}
 	},
 	"variables": {
@@ -90,7 +106,6 @@
 								"value": "@activity('Lookup1').output.value",
 								"type": "Expression"
 							},
-							"isSequential": false,
 							"activities": [
 								{
 									"name": "Execute Pipeline1",
@@ -150,20 +165,89 @@
 								"partitionOption": "None"
 							},
 							"sink": {
-								"type": "AzureSqlSink",
-								"writeBehavior": "upsert",
-								"upsertSettings": {
-									"useTempDB": true,
-									"keys": [
-										"SalesKey"
-									]
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
 								},
-								"sqlWriterUseTableLock": false,
-								"disableMetricsCollection": false
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
 							},
 							"enableStaging": false,
 							"translator": {
 								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "SalesKey",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "SalesKey",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "DateKey",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "DateKey",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "CustomerKey",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "CustomerKey",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "ProductKey",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "ProductKey",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "StoreKey",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "StoreKey",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Quantity",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "Quantity",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "SalesAmount",
+											"type": "Decimal"
+										},
+										"sink": {
+											"name": "SalesAmount",
+											"type": "Decimal"
+										}
+									}
+								],
 								"typeConversion": true,
 								"typeConversionSettings": {
 									"allowDataTruncation": true,
@@ -173,14 +257,14 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "AzureSqlTable2",
+								"referenceName": "AzureSqlTable1",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "AzureSqlTable2",
+								"referenceName": "DS_ADLS_PARQUET",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -228,7 +312,8 @@
 				"lastPublishTime": "2026-03-28T08:30:12Z"
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/AzureSqlTable2')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSqlTable1')]",
+				"[concat(variables('factoryId'), '/datasets/DS_ADLS_PARQUET')]",
 				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
 			]
 		},
@@ -349,6 +434,31 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DS_ADLS_PARQUET')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADLS_PARQUET_NEW",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "fctsales",
+						"fileSystem": "retaildw"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_ADLS_PARQUET_NEW')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabase1')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -371,17 +481,17 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/LS_ADLS_PARQUET')]",
+			"name": "[concat(parameters('factoryName'), '/LS_ADLS_PARQUET_NEW')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
 				"type": "AzureBlobFS",
 				"typeProperties": {
-					"url": "[parameters('LS_ADLS_PARQUET_properties_typeProperties_url')]",
+					"url": "[parameters('LS_ADLS_PARQUET_NEW_properties_typeProperties_url')]",
 					"accountKey": {
 						"type": "SecureString",
-						"value": "[parameters('LS_ADLS_PARQUET_accountKey')]"
+						"value": "[parameters('LS_ADLS_PARQUET_NEW_accountKey')]"
 					}
 				}
 			},
@@ -397,6 +507,55 @@
 				"typeProperties": {
 					"connectionString": "[parameters('LS_BLOB_EXCEL_connectionString')]"
 				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_SQLSERVER_RETAILDW')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"server": "[parameters('LS_SQLSERVER_RETAILDW_properties_typeProperties_server')]",
+					"database": "[parameters('LS_SQLSERVER_RETAILDW_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": true,
+					"authenticationType": "SQL",
+					"userName": "[parameters('LS_SQLSERVER_RETAILDW_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('LS_SQLSERVER_RETAILDW_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "JOYAL-IR",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/JOYAL-IR')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/JOYAL-IR')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"description": "Self-hosted integration runtime for local SQL Server (JOYAL)",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/JOYAL')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
 			},
 			"dependsOn": []
 		}

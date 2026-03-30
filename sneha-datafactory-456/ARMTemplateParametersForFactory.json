@@ -8,10 +8,13 @@
 		"AzureSqlDatabase1_password": {
 			"value": ""
 		},
-		"LS_ADLS_PARQUET_accountKey": {
+		"LS_ADLS_PARQUET_NEW_accountKey": {
 			"value": ""
 		},
 		"LS_BLOB_EXCEL_connectionString": {
+			"value": ""
+		},
+		"LS_SQLSERVER_RETAILDW_password": {
 			"value": ""
 		},
 		"AzureSqlDatabase1_properties_typeProperties_server": {
@@ -23,8 +26,17 @@
 		"AzureSqlDatabase1_properties_typeProperties_userName": {
 			"value": "sqladmin"
 		},
-		"LS_ADLS_PARQUET_properties_typeProperties_url": {
-			"value": "https://adlsdevfinance002ukoo.dfs.core.windows.net"
+		"LS_ADLS_PARQUET_NEW_properties_typeProperties_url": {
+			"value": "https://snehadatalake456.dfs.core.windows.net/"
+		},
+		"LS_SQLSERVER_RETAILDW_properties_typeProperties_server": {
+			"value": "JOYAL"
+		},
+		"LS_SQLSERVER_RETAILDW_properties_typeProperties_database": {
+			"value": "RETAILDW"
+		},
+		"LS_SQLSERVER_RETAILDW_properties_typeProperties_userName": {
+			"value": "adfuser"
 		}
 	}
 }

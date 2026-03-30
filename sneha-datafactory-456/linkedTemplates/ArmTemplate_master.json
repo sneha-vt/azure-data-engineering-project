@@ -11,13 +11,17 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'AzureSqlDatabase1'"
 		},
-		"LS_ADLS_PARQUET_accountKey": {
+		"LS_ADLS_PARQUET_NEW_accountKey": {
 			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'LS_ADLS_PARQUET'"
+			"metadata": "Secure string for 'accountKey' of 'LS_ADLS_PARQUET_NEW'"
 		},
 		"LS_BLOB_EXCEL_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_BLOB_EXCEL'"
+		},
+		"LS_SQLSERVER_RETAILDW_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_SQLSERVER_RETAILDW'"
 		},
 		"AzureSqlDatabase1_properties_typeProperties_server": {
 			"type": "string",
@@ -31,9 +35,21 @@
 			"type": "string",
 			"defaultValue": "sqladmin"
 		},
-		"LS_ADLS_PARQUET_properties_typeProperties_url": {
+		"LS_ADLS_PARQUET_NEW_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "https://adlsdevfinance002ukoo.dfs.core.windows.net"
+			"defaultValue": "https://snehadatalake456.dfs.core.windows.net/"
+		},
+		"LS_SQLSERVER_RETAILDW_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "JOYAL"
+		},
+		"LS_SQLSERVER_RETAILDW_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "RETAILDW"
+		},
+		"LS_SQLSERVER_RETAILDW_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "adfuser"
 		},
 		"containerUri": {
 			"type": "string",
@@ -65,11 +81,14 @@
 					"AzureSqlDatabase1_password": {
 						"value": "[parameters('AzureSqlDatabase1_password')]"
 					},
-					"LS_ADLS_PARQUET_accountKey": {
-						"value": "[parameters('LS_ADLS_PARQUET_accountKey')]"
+					"LS_ADLS_PARQUET_NEW_accountKey": {
+						"value": "[parameters('LS_ADLS_PARQUET_NEW_accountKey')]"
 					},
 					"LS_BLOB_EXCEL_connectionString": {
 						"value": "[parameters('LS_BLOB_EXCEL_connectionString')]"
+					},
+					"LS_SQLSERVER_RETAILDW_password": {
+						"value": "[parameters('LS_SQLSERVER_RETAILDW_password')]"
 					},
 					"AzureSqlDatabase1_properties_typeProperties_server": {
 						"value": "[parameters('AzureSqlDatabase1_properties_typeProperties_server')]"
@@ -80,8 +99,17 @@
 					"AzureSqlDatabase1_properties_typeProperties_userName": {
 						"value": "[parameters('AzureSqlDatabase1_properties_typeProperties_userName')]"
 					},
-					"LS_ADLS_PARQUET_properties_typeProperties_url": {
-						"value": "[parameters('LS_ADLS_PARQUET_properties_typeProperties_url')]"
+					"LS_ADLS_PARQUET_NEW_properties_typeProperties_url": {
+						"value": "[parameters('LS_ADLS_PARQUET_NEW_properties_typeProperties_url')]"
+					},
+					"LS_SQLSERVER_RETAILDW_properties_typeProperties_server": {
+						"value": "[parameters('LS_SQLSERVER_RETAILDW_properties_typeProperties_server')]"
+					},
+					"LS_SQLSERVER_RETAILDW_properties_typeProperties_database": {
+						"value": "[parameters('LS_SQLSERVER_RETAILDW_properties_typeProperties_database')]"
+					},
+					"LS_SQLSERVER_RETAILDW_properties_typeProperties_userName": {
+						"value": "[parameters('LS_SQLSERVER_RETAILDW_properties_typeProperties_userName')]"
 					}
 				}
 			},
