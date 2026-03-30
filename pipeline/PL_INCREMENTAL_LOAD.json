@@ -168,20 +168,16 @@
 		],
 		"parameters": {
 			"TableSchema": {
-				"type": "string",
-				"defaultValue": "@pipeline().parameters.TableSchema"
+				"type": "string"
 			},
 			"TableName": {
-				"type": "string",
-				"defaultValue": "@pipeline().parameters.TableName"
+				"type": "string"
 			},
 			"WatermarkColumn": {
-				"type": "string",
-				"defaultValue": "@pipeline().parameters.WatermarkColumn"
+				"type": "string"
 			},
 			"LastLoadValue": {
-				"type": "int",
-				"defaultValue": "@activity('Lookup_MaxWatermark').output.firstRow.MaxValue"
+				"type": "string"
 			}
 		},
 		"annotations": []
