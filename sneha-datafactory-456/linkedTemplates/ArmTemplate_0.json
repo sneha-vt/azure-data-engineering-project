@@ -406,7 +406,10 @@
 									"typeProperties": {
 										"source": {
 											"type": "AzureSqlSource",
-											"sqlReaderQuery": "@concat('SELECT * FROM ', item().TableSchema, '.', item().TableName)",
+											"sqlReaderQuery": {
+												"value": "@concat('SELECT * FROM ', item().TableSchema, '.', item().TableName)",
+												"type": "Expression"
+											},
 											"queryTimeout": "02:00:00",
 											"partitionOption": "None"
 										},
@@ -488,6 +491,13 @@
 													"type": "Expression"
 												},
 												"type": "Int32"
+											},
+											"WatermarkColumn": {
+												"value": {
+													"value": "@item().WatermarkColumn",
+													"type": "Expression"
+												},
+												"type": "String"
 											}
 										}
 									},
