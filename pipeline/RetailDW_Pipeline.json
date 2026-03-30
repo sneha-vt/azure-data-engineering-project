@@ -120,7 +120,10 @@
 				"outputs": [
 					{
 						"referenceName": "DS_ADLS_PARQUET",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"foldername": "@item().TableName"
+						}
 					}
 				]
 			},
