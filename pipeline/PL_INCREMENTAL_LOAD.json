@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "@concat(\n'SELECT MAX(', pipeline().parameters.WatermarkColumn, ') AS MaxValue FROM ',\npipeline().parameters.TableSchema,'.',pipeline().parameters.TableName\n)",
+						"sqlReaderQuery": "@concat(\n'SELECT * FROM ',\npipeline().parameters.TableSchema,'.',\npipeline().parameters.TableName,\n' WHERE ',\npipeline().parameters.WatermarkColumn,' > ',\nstring(pipeline().parameters.LastLoadValue)\n)",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -60,7 +60,10 @@
 							"typeProperties": {
 								"source": {
 									"type": "AzureSqlSource",
-									"sqlReaderQuery": "@concat(\n'SELECT * FROM ',\npipeline().parameters.TableSchema,'.',\npipeline().parameters.TableName,\n' WHERE ',\npipeline().parameters.WatermarkColumn,' > ',\npipeline().parameters.LastLoadValue\n)",
+									"sqlReaderQuery": {
+										"value": "@concat(\n'SELECT * FROM ',\npipeline().parameters.TableSchema,'.',\npipeline().parameters.TableName,\n' WHERE ',\npipeline().parameters.WatermarkColumn,' > ',\npipeline().parameters.LastLoadValue\n)",
+										"type": "Expression"
+									},
 									"queryTimeout": "02:00:00",
 									"partitionOption": "None"
 								},
@@ -122,19 +125,31 @@
 								"storedProcedureName": "[dbo].[UpdateWatermark]",
 								"storedProcedureParameters": {
 									"TableName": {
-										"value": "@pipeline().parameters.TableName",
+										"value": {
+											"value": "@pipeline().parameters.TableName",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"TableSchema": {
-										"value": "@pipeline().parameters.TableSchema",
+										"value": {
+											"value": "@pipeline().parameters.TableSchema",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"WatermarkColumn": {
-										"value": "@pipeline().parameters.WatermarkColumn",
+										"value": {
+											"value": "@pipeline().parameters.WatermarkColumn",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
 									"LastLoadValue": {
-										"value": "@activity('Lookup_MaxWatermark').output.firstRow.MaxValue",
+										"value": {
+											"value": "@activity('Lookup_MaxWatermark').output.firstRow.MaxValue",
+											"type": "Expression"
+										},
 										"type": "Int32"
 									}
 								}
