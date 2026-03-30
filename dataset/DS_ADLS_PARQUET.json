@@ -5,12 +5,20 @@
 			"referenceName": "LS_ADLS_PARQUET_NEW",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"foldername": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "Parquet",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "@{item().TableName}",
+				"folderPath": {
+					"value": "@{item().TableName}",
+					"type": "Expression"
+				},
 				"fileSystem": "retaildw"
 			},
 			"compressionCodec": "snappy"
