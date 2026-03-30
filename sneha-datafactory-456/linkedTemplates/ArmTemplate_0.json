@@ -346,7 +346,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Lookup1",
+						"name": "Lookup_Metadata",
 						"type": "Lookup",
 						"dependsOn": [],
 						"policy": {
@@ -373,11 +373,11 @@
 						}
 					},
 					{
-						"name": "ForEach1",
+						"name": "ForEach_Table",
 						"type": "ForEach",
 						"dependsOn": [
 							{
-								"activity": "Lookup1",
+								"activity": "Lookup_Metadata",
 								"dependencyConditions": [
 									"Skipped",
 									"Succeeded"
@@ -387,12 +387,12 @@
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "@activity('Lookup1').output.value",
+								"value": "@activity('Lookup_Metadata').output.value",
 								"type": "Expression"
 							},
 							"activities": [
 								{
-									"name": "Copy data1",
+									"name": "Copy_SQL_to_ADLS",
 									"type": "Copy",
 									"dependsOn": [],
 									"policy": {
@@ -406,10 +406,7 @@
 									"typeProperties": {
 										"source": {
 											"type": "AzureSqlSource",
-											"sqlReaderQuery": {
-												"value": "SELECT * FROM @{item().TableSchema}.@{item().TableName}\nWHERE @{item().WatermarkColumn} > @{item().LastLoadValue}",
-												"type": "Expression"
-											},
+											"sqlReaderQuery": "SELECT * FROM @{item().TableSchema}.@{item().TableName}",
 											"queryTimeout": "02:00:00",
 											"partitionOption": "None"
 										},
@@ -444,7 +441,7 @@
 											"referenceName": "DS_ADLS_PARQUET",
 											"type": "DatasetReference",
 											"parameters": {
-												"foldername": "foldername = @item().TableName"
+												"foldername": "@item().TableName"
 											}
 										}
 									]
@@ -454,7 +451,7 @@
 									"type": "SqlServerStoredProcedure",
 									"dependsOn": [
 										{
-											"activity": "Copy data1",
+											"activity": "Copy_SQL_to_ADLS",
 											"dependencyConditions": [
 												"Succeeded"
 											]
@@ -469,7 +466,7 @@
 									},
 									"userProperties": [],
 									"typeProperties": {
-										"storedProcedureName": "[[dbo].[UpdateWatermark]",
+										"storedProcedureName": "UpdateWatermark",
 										"storedProcedureParameters": {
 											"@TableSchema": {
 												"value": {
