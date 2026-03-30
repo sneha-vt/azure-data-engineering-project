@@ -127,32 +127,20 @@
 							"typeProperties": {
 								"storedProcedureName": "[dbo].[UpdateWatermark]",
 								"storedProcedureParameters": {
-									"TableName": {
-										"value": {
-											"value": "@pipeline().parameters.TableName",
-											"type": "Expression"
-										},
+									"TableSchema": {
+										"value": "@pipeline().parameters.TableSchema",
 										"type": "String"
 									},
-									"TableSchema": {
-										"value": {
-											"value": "@pipeline().parameters.TableSchema",
-											"type": "Expression"
-										},
+									"TableName": {
+										"value": "@pipeline().parameters.TableName",
 										"type": "String"
 									},
 									"WatermarkColumn": {
-										"value": {
-											"value": "@pipeline().parameters.WatermarkColumn",
-											"type": "Expression"
-										},
+										"value": "@pipeline().parameters.WatermarkColumn",
 										"type": "String"
 									},
 									"LastLoadValue": {
-										"value": {
-											"value": "@activity('Lookup_MaxWatermark').output.firstRow.MaxValue",
-											"type": "Expression"
-										},
+										"value": "@activity('Lookup_MaxWatermark').output.firstRow.MaxValue",
 										"type": "Int32"
 									}
 								}
