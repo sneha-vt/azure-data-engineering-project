@@ -1,0 +1,7 @@
+{
+	"name": "JOYAL-IR",
+	"properties": {
+		"type": "SelfHosted",
+		"description": "Self-hosted integration runtime for local SQL Server (JOYAL)"
+	}
+}
