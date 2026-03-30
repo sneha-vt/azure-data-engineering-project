@@ -17,7 +17,10 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "@concat(\n'SELECT MAX(',\npipeline().parameters.WatermarkColumn,\n') AS MaxValue FROM ',\npipeline().parameters.TableSchema,\n'.',\npipeline().parameters.TableName\n)",
+						"sqlReaderQuery": {
+							"value": "@concat(\n'SELECT MAX(',\npipeline().parameters.WatermarkColumn,\n') AS MaxValue FROM ',\npipeline().parameters.TableSchema,\n'.',\npipeline().parameters.TableName\n)",
+							"type": "Expression"
+						},
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -60,7 +63,10 @@
 							"typeProperties": {
 								"source": {
 									"type": "AzureSqlSource",
-									"sqlReaderQuery": "@concat(\n'SELECT * FROM ',\npipeline().parameters.TableSchema,\n'.',\npipeline().parameters.TableName,\n' WHERE ',\npipeline().parameters.WatermarkColumn,\n' > ',\nstring(pipeline().parameters.LastLoadValue)\n)",
+									"sqlReaderQuery": {
+										"value": "@concat(\n'SELECT * FROM ',\npipeline().parameters.TableSchema,\n'.',\npipeline().parameters.TableName,\n' WHERE ',\npipeline().parameters.WatermarkColumn,\n' > ',\nstring(pipeline().parameters.LastLoadValue)\n)",
+										"type": "Expression"
+									},
 									"queryTimeout": "02:00:00",
 									"partitionOption": "None"
 								},
@@ -162,16 +168,20 @@
 		],
 		"parameters": {
 			"TableSchema": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "@pipeline().parameters.TableSchema"
 			},
 			"TableName": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "@pipeline().parameters.TableName"
 			},
 			"WatermarkColumn": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "@pipeline().parameters.WatermarkColumn"
 			},
 			"LastLoadValue": {
-				"type": "int"
+				"type": "int",
+				"defaultValue": "@activity('Lookup_MaxWatermark').output.firstRow.MaxValue"
 			}
 		},
 		"annotations": []
