@@ -122,9 +122,26 @@
 								"secureOutput": false,
 								"secureInput": false
 							},
-							"userProperties": [],
 							"typeProperties": {
-								"storedProcedureName": "[dbo].[UpdateWatermark]"
+								"storedProcedureName": "[dbo].[UpdateWatermark]",
+								"storedProcedureParameters": {
+									"TableSchema": {
+										"value": "@item().TableSchema",
+										"type": "String"
+									},
+									"TableName": {
+										"value": "@item().TableName",
+										"type": "String"
+									},
+									"WatermarkColoumn": {
+										"value": "@item().WatermarkColumn",
+										"type": "String"
+									},
+									"LastLoadvalue": {
+										"value": "@item().LastLoadValue",
+										"type": "Int32"
+									}
+								}
 							},
 							"linkedServiceName": {
 								"referenceName": "AzureSqlDatabase1",
