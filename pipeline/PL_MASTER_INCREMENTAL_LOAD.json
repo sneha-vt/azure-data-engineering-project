@@ -61,7 +61,10 @@
 							"typeProperties": {
 								"source": {
 									"type": "AzureSqlSource",
-									"sqlReaderQuery": "SELECT * FROM @{item().TableSchema}.@{item().TableName}\nWHERE @{item().WatermarkColumn} > @{item().LastLoadValue}",
+									"sqlReaderQuery": {
+										"value": "SELECT * FROM @{item().TableSchema}.@{item().TableName}\nWHERE @{item().WatermarkColumn} > @{item().LastLoadValue}",
+										"type": "Expression"
+									},
 									"queryTimeout": "02:00:00",
 									"partitionOption": "None"
 								},
