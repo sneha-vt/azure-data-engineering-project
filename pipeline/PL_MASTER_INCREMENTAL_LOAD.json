@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": "SELECT TableSchema,\n       TableName,\n       WatermarkColumn,\n       LastLoadValue\nFROM dbo.ADF_Watermark_Table",
+						"sqlReaderQuery": "SELECT \n    TableSchema,\n    TableName,\n    WatermarkColumn,\n    LastLoadValue\nFROM dbo.ADF_Watermark_Table",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
