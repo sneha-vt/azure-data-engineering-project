@@ -96,7 +96,8 @@
 							{
 								"activity": "Lookup1",
 								"dependencyConditions": [
-									"Skipped"
+									"Skipped",
+									"Succeeded"
 								]
 							}
 						],
