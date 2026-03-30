@@ -60,10 +60,7 @@
 							"typeProperties": {
 								"source": {
 									"type": "AzureSqlSource",
-									"sqlReaderQuery": {
-										"value": "@concat(\n'SELECT * FROM ',\npipeline().parameters.TableSchema,'.',\npipeline().parameters.TableName,\n' WHERE ',\npipeline().parameters.WatermarkColumn,' > ',\npipeline().parameters.LastLoadValue\n)",
-										"type": "Expression"
-									},
+									"sqlReaderQuery": "@concat(\n'SELECT * FROM ',\npipeline().parameters.TableSchema,\n'.',\npipeline().parameters.TableName,\n' WHERE ',\npipeline().parameters.WatermarkColumn,\n' > ',\nstring(pipeline().parameters.LastLoadValue)\n)",
 									"queryTimeout": "02:00:00",
 									"partitionOption": "None"
 								},
