@@ -122,7 +122,7 @@
 						"referenceName": "DS_ADLS_PARQUET",
 						"type": "DatasetReference",
 						"parameters": {
-							"foldername": "@item().TableName"
+							"foldername": "@item().tablename"
 						}
 					}
 				]
