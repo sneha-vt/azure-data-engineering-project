@@ -199,13 +199,6 @@
 												},
 												"type": "String"
 											},
-											"WatermarkColoumn": {
-												"value": {
-													"value": "@item().WatermarkColumn",
-													"type": "Expression"
-												},
-												"type": "String"
-											},
 											"LastLoadValue": {
 												"value": {
 													"value": "@item().LastLoadValue",
