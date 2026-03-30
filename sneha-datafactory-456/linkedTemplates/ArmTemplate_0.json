@@ -468,28 +468,28 @@
 									"typeProperties": {
 										"storedProcedureName": "UpdateWatermark",
 										"storedProcedureParameters": {
-											"@TableSchema": {
+											"TableSchema": {
 												"value": {
 													"value": "@item().TableSchema",
 													"type": "Expression"
 												},
 												"type": "String"
 											},
-											"@TableName": {
+											"TableName": {
 												"value": {
 													"value": "@item().TableName",
 													"type": "Expression"
 												},
 												"type": "String"
 											},
-											"@WatermarkColoumn": {
+											"WatermarkColoumn": {
 												"value": {
 													"value": "@item().WatermarkColumn",
 													"type": "Expression"
 												},
 												"type": "String"
 											},
-											"@LastLoadValue": {
+											"LastLoadValue": {
 												"value": {
 													"value": "@item().LastLoadValue",
 													"type": "Expression"
