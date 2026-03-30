@@ -137,7 +137,7 @@
 										"value": "@item().WatermarkColumn",
 										"type": "String"
 									},
-									"LastLoadvalue": {
+									"LastLoadValue": {
 										"value": "@item().LastLoadValue",
 										"type": "Int32"
 									}
