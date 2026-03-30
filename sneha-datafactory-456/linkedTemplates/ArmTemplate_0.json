@@ -340,13 +340,13 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/PL_MASTER_INCREMENTAL_LOAD')]",
+			"name": "[concat(parameters('factoryName'), '/PL_INCREMENTAL_LOAD')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Lookup_Metadata",
+						"name": "Lookup_MaxWatermark",
 						"type": "Lookup",
 						"dependsOn": [],
 						"policy": {
@@ -360,7 +360,10 @@
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
-								"sqlReaderQuery": "SELECT \n    TableSchema,\n    TableName,\n    WatermarkColumn,\n    LastLoadValue\nFROM dbo.ADF_Watermark_Table",
+								"sqlReaderQuery": {
+									"value": "@concat(\n'SELECT MAX(',\npipeline().parameters.WatermarkColumn,\n') AS MaxValue FROM ',\npipeline().parameters.TableSchema,\n'.',\npipeline().parameters.TableName\n)",
+									"type": "Expression"
+								},
 								"queryTimeout": "02:00:00",
 								"partitionOption": "None"
 							},
@@ -368,29 +371,27 @@
 								"referenceName": "AzureSqlTable1",
 								"type": "DatasetReference",
 								"parameters": {}
-							},
-							"firstRowOnly": false
+							}
 						}
 					},
 					{
-						"name": "ForEach_Table",
-						"type": "ForEach",
+						"name": "If Condition1",
+						"type": "IfCondition",
 						"dependsOn": [
 							{
-								"activity": "Lookup_Metadata",
+								"activity": "Lookup_MaxWatermark",
 								"dependencyConditions": [
-									"Skipped",
 									"Succeeded"
 								]
 							}
 						],
 						"userProperties": [],
 						"typeProperties": {
-							"items": {
-								"value": "@activity('Lookup_Metadata').output.value",
+							"expression": {
+								"value": "@greater(\nactivity('Lookup_MaxWatermark').output.firstRow.MaxValue,\npipeline().parameters.LastLoadValue\n)",
 								"type": "Expression"
 							},
-							"activities": [
+							"ifTrueActivities": [
 								{
 									"name": "Copy_SQL_to_ADLS",
 									"type": "Copy",
@@ -407,7 +408,7 @@
 										"source": {
 											"type": "AzureSqlSource",
 											"sqlReaderQuery": {
-												"value": "@concat('SELECT * FROM ', item().TableSchema, '.', item().TableName)",
+												"value": "@concat(\n'SELECT * FROM ',\npipeline().parameters.TableSchema,\n'.',\npipeline().parameters.TableName,\n' WHERE ',\npipeline().parameters.WatermarkColumn,\n' > ',\nstring(pipeline().parameters.LastLoadValue)\n)",
 												"type": "Expression"
 											},
 											"queryTimeout": "02:00:00",
@@ -444,13 +445,13 @@
 											"referenceName": "DS_ADLS_PARQUET",
 											"type": "DatasetReference",
 											"parameters": {
-												"foldername": "@item().TableName"
+												"foldername": "@pipeline().parameters.TableName"
 											}
 										}
 									]
 								},
 								{
-									"name": "Stored procedure1",
+									"name": "UpdateWatermark_SP",
 									"type": "SqlServerStoredProcedure",
 									"dependsOn": [
 										{
@@ -469,35 +470,35 @@
 									},
 									"userProperties": [],
 									"typeProperties": {
-										"storedProcedureName": "UpdateWatermark",
+										"storedProcedureName": "[[dbo].[UpdateWatermark]",
 										"storedProcedureParameters": {
-											"TableSchema": {
+											"TableName": {
 												"value": {
-													"value": "@item().TableSchema",
+													"value": "@pipeline().parameters.TableName",
 													"type": "Expression"
 												},
 												"type": "String"
 											},
-											"TableName": {
+											"TableSchema": {
 												"value": {
-													"value": "@item().TableName",
+													"value": "@pipeline().parameters.TableSchema",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"WatermarkColumn": {
+												"value": {
+													"value": "@pipeline().parameters.WatermarkColumn",
 													"type": "Expression"
 												},
 												"type": "String"
 											},
 											"LastLoadValue": {
 												"value": {
-													"value": "@item().LastLoadValue",
+													"value": "@activity('Lookup_MaxWatermark').output.firstRow.MaxValue",
 													"type": "Expression"
 												},
 												"type": "Int32"
-											},
-											"WatermarkColumn": {
-												"value": {
-													"value": "@item().WatermarkColumn",
-													"type": "Expression"
-												},
-												"type": "String"
 											}
 										}
 									},
@@ -510,12 +511,24 @@
 						}
 					}
 				],
-				"concurrency": 2,
 				"policy": {
 					"elapsedTimeMetric": {}
 				},
-				"annotations": [],
-				"lastPublishTime": "2026-03-28T09:17:01Z"
+				"parameters": {
+					"TableSchema": {
+						"type": "string"
+					},
+					"TableName": {
+						"type": "string"
+					},
+					"WatermarkColumn": {
+						"type": "string"
+					},
+					"LastLoadValue": {
+						"type": "int"
+					}
+				},
+				"annotations": []
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/AzureSqlTable1')]",
@@ -700,6 +713,108 @@
 				"[concat(variables('factoryId'), '/datasets/AzureSqlTable1')]",
 				"[concat(variables('factoryId'), '/datasets/DS_ADLS_PARQUET')]",
 				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_MASTER_INCREMENTAL_LOAD')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup_Metadata",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "SELECT \n    TableSchema,\n    TableName,\n    WatermarkColumn,\n    LastLoadValue\nFROM dbo.ADF_Watermark_Table",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "AzureSqlTable1",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach_Table",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup_Metadata",
+								"dependencyConditions": [
+									"Skipped",
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup_Metadata').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Execute Pipeline1",
+									"type": "ExecutePipeline",
+									"dependsOn": [],
+									"policy": {
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "PL_INCREMENTAL_LOAD",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"TableSchema": {
+												"value": "@item().TableSchema",
+												"type": "Expression"
+											},
+											"TableName": {
+												"value": "@item().TableName",
+												"type": "Expression"
+											},
+											"WatermarkColumn": {
+												"value": "@item().WatermarkColumn",
+												"type": "Expression"
+											},
+											"LastLoadValue": {
+												"value": "@item().LastLoadValue",
+												"type": "Expression"
+											}
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"concurrency": 2,
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": [],
+				"lastPublishTime": "2026-03-28T09:17:01Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/AzureSqlTable1')]",
+				"[concat(variables('factoryId'), '/pipelines/PL_INCREMENTAL_LOAD')]"
 			]
 		}
 	]
