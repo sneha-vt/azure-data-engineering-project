@@ -122,23 +122,36 @@
 								"secureOutput": false,
 								"secureInput": false
 							},
+							"userProperties": [],
 							"typeProperties": {
 								"storedProcedureName": "[dbo].[UpdateWatermark]",
 								"storedProcedureParameters": {
-									"TableSchema": {
-										"value": "@item().TableSchema",
+									"@TableSchema": {
+										"value": {
+											"value": "@item().TableSchema",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
-									"TableName": {
-										"value": "@item().TableName",
+									"@TableName": {
+										"value": {
+											"value": "@item().TableName",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
-									"WatermarkColoumn": {
-										"value": "@item().WatermarkColumn",
+									"@WatermarkColoumn": {
+										"value": {
+											"value": "@item().WatermarkColumn",
+											"type": "Expression"
+										},
 										"type": "String"
 									},
-									"LastLoadValue": {
-										"value": "@item().LastLoadValue",
+									"@LastLoadValue": {
+										"value": {
+											"value": "@item().LastLoadValue",
+											"type": "Expression"
+										},
 										"type": "Int32"
 									}
 								}
