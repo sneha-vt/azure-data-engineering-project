@@ -143,6 +143,10 @@
 											"type": "Expression"
 										},
 										"type": "Int32"
+									},
+									"WatermarkColumn": {
+										"value": "@item().WatermarkColumn",
+										"type": "String"
 									}
 								}
 							},
