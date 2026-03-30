@@ -20,37 +20,86 @@
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
-					"sink": {
-						"type": "AzureSqlSink",
-						"writeBehavior": "upsert",
-						"upsertSettings": {
-							"useTempDB": true,
-							"keys": [
-								"SalesKey"
-							]
-						},
-						"sqlWriterUseTableLock": false,
-						"disableMetricsCollection": false
-					},
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
+						"mappings": [
+							{
+								"source": {
+									"name": "SalesKey",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "SalesKey",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "DateKey",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "DateKey",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "CustomerKey",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "CustomerKey",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "ProductKey",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "ProductKey",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "StoreKey",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "StoreKey",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Quantity",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "Quantity",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "SalesAmount",
+									"type": "Decimal"
+								},
+								"sink": {
+									"name": "SalesAmount",
+									"type": "Decimal"
+								}
+							}
+						]
 					}
 				},
 				"inputs": [
 					{
-						"referenceName": "AzureSqlTable2",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "AzureSqlTable2",
+						"referenceName": "AzureSqlTable1",
 						"type": "DatasetReference"
 					}
 				]

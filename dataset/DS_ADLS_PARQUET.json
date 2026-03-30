@@ -1,0 +1,20 @@
+{
+	"name": "DS_ADLS_PARQUET",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS_PARQUET_NEW",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "fctsales",
+				"fileSystem": "retaildw"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
