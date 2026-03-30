@@ -1,0 +1,21 @@
+{
+	"name": "LS_SQLSERVER_RETAILDW",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"server": "JOYAL",
+			"database": "RETAILDW",
+			"encrypt": "mandatory",
+			"trustServerCertificate": true,
+			"authenticationType": "SQL",
+			"userName": "adfuser",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJiZGNhYzM0ZS0yNmU0LTRmMmItYTM1OC00NzZkMmVjMDdjYTQiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "JOYAL-IR",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
