@@ -62,7 +62,7 @@
 							"typeProperties": {
 								"source": {
 									"type": "AzureSqlSource",
-									"sqlReaderQuery": "SELECT * FROM @{item().TableSchema}.@{item().TableName}",
+									"sqlReaderQuery": "@concat('SELECT * FROM ', item().TableSchema, '.', item().TableName)",
 									"queryTimeout": "02:00:00",
 									"partitionOption": "None"
 								},
