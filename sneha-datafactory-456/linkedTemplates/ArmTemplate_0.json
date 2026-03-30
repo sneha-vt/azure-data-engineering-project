@@ -143,12 +143,17 @@
 					"referenceName": "LS_ADLS_PARQUET_NEW",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"foldername": {
+						"type": "string"
+					}
+				},
 				"annotations": [],
 				"type": "Parquet",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"folderPath": "fctsales",
+						"folderPath": "@dataset().foldername",
 						"fileSystem": "retaildw"
 					},
 					"compressionCodec": "snappy"
@@ -356,14 +361,12 @@
 								"partitionOption": "None"
 							},
 							"sink": {
-								"type": "DelimitedTextSink",
+								"type": "ParquetSink",
 								"storeSettings": {
 									"type": "AzureBlobFSWriteSettings"
 								},
 								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".txt"
+									"type": "ParquetWriteSettings"
 								}
 							},
 							"enableStaging": false,
@@ -457,9 +460,11 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "DS_ADLS_CSV",
+								"referenceName": "DS_ADLS_PARQUET",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"foldername": "@item().TableName"
+								}
 							}
 						]
 					},
@@ -506,7 +511,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/AzureSqlTable1')]",
-				"[concat(variables('factoryId'), '/datasets/DS_ADLS_CSV')]",
+				"[concat(variables('factoryId'), '/datasets/DS_ADLS_PARQUET')]",
 				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
 			]
 		},
@@ -560,9 +565,10 @@
 								"value": "@activity('Lookup1').output.value",
 								"type": "Expression"
 							},
+							"isSequential": true,
 							"activities": [
 								{
-									"name": "Execute Pipeline1",
+									"name": "EXEC_SQL_INCREMENTAL_PIPELINE",
 									"type": "ExecutePipeline",
 									"dependsOn": [],
 									"policy": {
