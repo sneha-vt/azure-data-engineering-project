@@ -17,10 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"sqlReaderQuery": {
-							"value": "@concat(\n'SELECT MAX(',\npipeline().parameters.WatermarkColumn,\n') AS MaxValue FROM ',\npipeline().parameters.TableSchema,\n'.',\npipeline().parameters.TableName\n)",
-							"type": "Expression"
-						},
+						"sqlReaderQuery": "@concat(\n'SELECT MAX(', pipeline().parameters.WatermarkColumn, ') AS MaxValue FROM ',\npipeline().parameters.TableSchema, '.',\npipeline().parameters.TableName\n)",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
