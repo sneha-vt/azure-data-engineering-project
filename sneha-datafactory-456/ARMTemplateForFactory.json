@@ -78,7 +78,7 @@
 							"source": {
 								"type": "AzureSqlSource",
 								"sqlReaderQuery": {
-									"value": "@concat(\n'SELECT MAX(',\npipeline().parameters.WatermarkColumn,\n') AS MaxValue FROM ',\npipeline().parameters.TableSchema,\n'.',\npipeline().parameters.TableName\n)",
+									"value": "@concat(\n'SELECT MAX(', pipeline().parameters.WatermarkColumn, ') AS MaxValue FROM ',\npipeline().parameters.TableSchema, '.',\npipeline().parameters.TableName\n)",
 									"type": "Expression"
 								},
 								"queryTimeout": "02:00:00",
@@ -105,7 +105,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"expression": {
-								"value": "@greater(\nactivity('Lookup_MaxWatermark').output.firstRow.MaxValue,\npipeline().parameters.LastLoadValue\n)",
+								"value": "@greater(\nint(activity('Lookup_MaxWatermark').output.firstRow.MaxValue),\nint(pipeline().parameters.LastLoadValue)\n)",
 								"type": "Expression"
 							},
 							"ifTrueActivities": [
@@ -211,7 +211,10 @@
 												"type": "String"
 											},
 											"NewWatermarkValue": {
-												"value": "@activity('Lookup_MaxWatermark').output.firstRow.MaxValue",
+												"value": {
+													"value": "@activity('Lookup_MaxWatermark').output.firstRow.MaxValue",
+													"type": "Expression"
+												},
 												"type": "Int64"
 											}
 										}
