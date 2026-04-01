@@ -51,7 +51,7 @@ Steps:
 
 ### Screenshot of Child Pipeline
 
-![Child Pipeline](Pipelinedesign.png)
+![Child Pipeline]()
 
 ---
 
