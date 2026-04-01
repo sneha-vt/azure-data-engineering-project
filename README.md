@@ -20,9 +20,11 @@ The pipeline extracts data from **Azure SQL Database**, loads it into **Azure Da
 
 The solution uses a **Master–Child pipeline architecture**.
 
-### Master Pipeline
+### Master Pipeline Architecture
 
-The Master Pipeline reads metadata from the watermark table and dynamically processes each table using a **ForEach activity**.
+The master pipeline orchestrates the incremental data loading process by dynamically iterating through tables defined in the metadata table.
+
+![Master Pipeline](Pipelinedesign.png)
 
 Steps:
 
@@ -30,17 +32,15 @@ Steps:
 * ForEach loop to iterate tables
 * Execute child pipeline for each table
 
-### Screenshot of Master Pipeline
-
-![Master Pipeline](Pipelinesuccess.png)
-
 ---
 
 ## Incremental Load Logic
 
-### Child Pipeline
+### Child Pipeline – Incremental Load Process
 
-The Child Pipeline performs incremental loading for each table.
+The child pipeline performs incremental data extraction using watermark logic and loads new records to ADLS in Parquet format.
+
+![Child Pipeline](Pipelinesuccess.png)
 
 Steps:
 
@@ -49,9 +49,6 @@ Steps:
 3. Copy new records from SQL to ADLS
 4. Update watermark using stored procedure
 
-### Screenshot of Child Pipeline
-
-![Child Pipeline]()
 
 ---
 
