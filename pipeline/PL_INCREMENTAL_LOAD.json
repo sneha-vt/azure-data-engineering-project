@@ -147,10 +147,6 @@
 											"type": "Expression"
 										},
 										"type": "String"
-									},
-									"NewWatermarkValue": {
-										"value": "@activity('Lookup_MaxWatermark').output.firstRow.MaxValue",
-										"type": "Int64"
 									}
 								}
 							},
