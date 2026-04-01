@@ -32,9 +32,7 @@ Steps:
 
 ### Screenshot of Master Pipeline
 
-(Add your **Master Pipeline screenshot here**)
-
-![Master Pipeline](Pipelinedesign.png)
+![Master Pipeline](Pipelinesuccess.png)
 
 ---
 
@@ -53,9 +51,7 @@ Steps:
 
 ### Screenshot of Child Pipeline
 
-(Add your **Child Pipeline screenshot here**)
-
-![Child Pipeline](Pipelinesuccess.png)
+![Child Pipeline](Pipelinedesign.png)
 
 ---
 
