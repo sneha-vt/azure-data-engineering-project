@@ -1,24 +1,9 @@
-# Azure Data Engineering Pipeline using Azure Data Factory
+# Azure Data Factory Incremental ETL Pipeline
 
-## Project Overview
+## Overview
 
-This project demonstrates an **end-to-end ETL pipeline using Azure Data Factory**.
-Data is extracted from **Azure SQL Database**, processed using **incremental loading**, and stored in **Azure Data Lake Storage**.
-
-The pipeline is designed to load **only new records using a watermark column**, improving performance and efficiency.
-
----
-
-## Architecture
-
-Azure SQL Database → Azure Data Factory → Azure Data Lake Storage
-
-Workflow:
-
-1. Data is stored in Azure SQL Database.
-2. Azure Data Factory pipelines orchestrate the ETL process.
-3. Incremental logic extracts only new records.
-4. Processed data is stored in Azure Data Lake Storage.
+This project demonstrates a **metadata-driven incremental ETL pipeline** built using **Azure Data Factory**.
+The pipeline extracts data from **Azure SQL Database**, loads it into **Azure Data Lake Storage Gen2 (ADLS)** in **Parquet format**, and processes only new records using a **watermark table**.
 
 ---
 
@@ -27,82 +12,63 @@ Workflow:
 * Azure Data Factory
 * Azure SQL Database
 * Azure Data Lake Storage Gen2
-* SQL
 * GitHub
 
 ---
 
-## Pipelines
+## Pipeline Architecture
 
-### RetailDW_Pipeline
+The solution uses a **Master–Child pipeline architecture**.
 
-Copies data from Azure SQL Database to Azure Data Lake Storage.
+### Master Pipeline
 
-### PL_INCREMENTAL_LOAD
+The Master Pipeline reads metadata from the watermark table and dynamically processes each table using a **ForEach activity**.
 
-Loads only new records using incremental loading logic.
+Steps:
 
-### PL_MASTER_INCREMENTAL_LOAD
+* Lookup metadata from watermark table
+* ForEach loop to iterate tables
+* Execute child pipeline for each table
 
-Master pipeline that orchestrates the incremental load pipeline.
+### Screenshot of Master Pipeline
+
+(Add your **Master Pipeline screenshot here**)
+
+![Master Pipeline](Pipelinedesign.png)
 
 ---
 
 ## Incremental Load Logic
 
-Incremental loading is implemented using a **watermark column**.
+### Child Pipeline
+
+The Child Pipeline performs incremental loading for each table.
 
 Steps:
 
-1. Read last processed value from watermark table
-2. Extract records greater than that value
-3. Load new records to Data Lake
-4. Update watermark table
+1. Lookup the maximum watermark value
+2. Compare with the LastLoadValue in the watermark table
+3. Copy new records from SQL to ADLS
+4. Update watermark using stored procedure
 
-Example query:
+### Screenshot of Child Pipeline
 
-```sql
-SELECT *
-FROM FactShipment
-WHERE ShipmentKey > @LastLoadValue
-```
+(Add your **Child Pipeline screenshot here**)
+
+![Child Pipeline](Pipelinesuccess.png)
 
 ---
 
-## Project Structure
+## Key Features
 
-```
-azure-data-engineering-project
-│
-├── dataset
-├── factory
-├── integrationRuntime
-├── linkedService
-├── pipeline
-│   ├── PL_INCREMENTAL_LOAD.json
-│   ├── PL_MASTER_INCREMENTAL_LOAD.json
-│   └── RetailDW_Pipeline.json
-│
-├── Pipelinedesign.png
-├── Pipelinesuccess.png
-└── README.md
-```
-
----
-
-## Pipeline Design
-
-![Pipeline Design](Pipelinedesign.png)
-
----
-
-## Pipeline Execution
-
-![Pipeline Execution](Pipelinesuccess.png)
+* Metadata-driven pipeline
+* Incremental data loading using watermark logic
+* Dynamic SQL query generation
+* Automated watermark updates
+* Data stored in Parquet format in ADLS
 
 ---
 
 ## Author
 
 Sneha Thomas
-Software Engineer – Gamma Analytics
